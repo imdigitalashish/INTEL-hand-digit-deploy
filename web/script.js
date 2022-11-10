@@ -5,11 +5,19 @@ class GameBoard {
         this.canvas.height = 400;
         this.ctx = this.canvas.getContext('2d');
         this.addListeners();
+        this.ctx.fillStyle = "#fff";
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
     }
 
     isDrawing = false;
 
 
+
+    fetchImage = async (context) => {
+        let request = await fetch("http://localhost:8000/predict", context);
+        let resp = await request.json();
+        console.log(resp);
+    }
 
     predictImage() {
         let canvasData = this.canvas.toBlob((blob) => {
@@ -18,13 +26,17 @@ class GameBoard {
 
             let formData = new FormData();
             formData.append("file", file);
+
+
+            this.fetchImage({ method: "POST", body: formData });
     
-            fetch("http://localhost:8000/predict", { method: "POST", body: formData })
-                .then((res) => {
-                    console.log(res);
-                }).catch((err) => {
-                    console.log(err)
-                })
+            // fetch("http://localhost:8000/predict", { method: "POST", body: formData })
+            //     .then((res) => {
+            //         console.log(res.body);
+            //         // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            //     }).catch((err) => {
+            //         console.log(err)
+            //     })
         }, "image/jpeg");
         // let image = new Image();
         // image.src = canvasData;
