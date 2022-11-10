@@ -17,6 +17,7 @@ class GameBoard {
         let request = await fetch("http://localhost:8000/predict", context);
         let resp = await request.json();
         console.log(resp);
+        document.querySelector(".result").innerHTML = resp.name;
     }
 
     predictImage() {
